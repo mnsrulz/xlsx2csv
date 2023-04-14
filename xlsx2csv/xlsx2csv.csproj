@@ -7,7 +7,28 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>xlsx2csv</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
+    <Authors>mnsrulz</Authors>
+    <Description>A tool to convert excel files to csv in no time</Description>
+    <PackageProjectUrl>https://github.com/mnsrulz/xlsx2csv</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageTags>xlsx2csv, excel to csv</PackageTags>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+        Add an icon.png next to the csproj:
+        - Supported format: png, jpg
+        - Recommended dimensions: 128x128
+        - Maximum size: 1MB
+    -->
+    <None Include="icon.png" Pack="true" PackagePath="" />
+    <None Include="../README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="MinVer" Version="4.3.0">
