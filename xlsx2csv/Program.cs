@@ -17,7 +17,10 @@ Parser.Default.ParseArguments<Options>(args)
                         if (String.IsNullOrEmpty(o.OutputFileName))
                             o.OutputFileName = Path.ChangeExtension(inputFile.FullName, ".csv");
 
-                        var edr = ExcelDataReader.Create(o.InputFileName);
+                        var edr = ExcelDataReader.Create(o.InputFileName, new ExcelDataReaderOptions
+                        {
+                            GetErrorAsNull = true
+                        });
                         do
                         {
                             var sheetName = edr.WorksheetName;
@@ -36,10 +39,10 @@ class Options
     [Value(0, Required = true, MetaName = "InputFile", HelpText = "Input file to be processed.")]
     public string InputFileName { get; set; }
 
-    [Value(1, Required = false, MetaName = "Worksheet", HelpText = "Worksheet name to be processed.")]
+    [Value(2, Required = false, MetaName = "Worksheet", HelpText = "Worksheet name to be processed.")]
     public string WorksheetName { get; set; }
 
-    [Value(2, Required = false, MetaName = "OutputFile", HelpText = "Output file to write data to.")]
+    [Value(1, Required = false, MetaName = "OutputFile", HelpText = "Output file to write data to.")]
     public string OutputFileName { get; set; }
 
 
