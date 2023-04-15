@@ -7,24 +7,32 @@ Parser.Default.ParseArguments<Options>(args)
                     .WithParsed<Options>(o =>
                     {
                         long startTime = Stopwatch.GetTimestamp();
-                        FileInfo inputFile = new FileInfo(o.InputFileName);
-                        if (!inputFile.Exists)
-                        {
-                            Console.WriteLine("File not exists");
-                            return;
-                        }
+                        var inputFile = new FileInfo(o.InputFileName);
+                        if (!inputFile.Exists) throw new FileNotFoundException("File not exists");
 
                         if (String.IsNullOrEmpty(o.OutputFileName))
                             o.OutputFileName = Path.ChangeExtension(inputFile.FullName, ".csv");
+
+                        if (char.IsWhiteSpace(o.Delimiter))
+                            o.Delimiter = ',';
 
                         var edr = ExcelDataReader.Create(o.InputFileName, new ExcelDataReaderOptions
                         {
                             GetErrorAsNull = true
                         });
+                        if (!string.IsNullOrWhiteSpace(o.SheetName))
+                        {
+                            if (edr.WorksheetNames.Contains(o.SheetName)) edr.TryOpenWorksheet(o.SheetName);
+                            else throw new KeyNotFoundException($"Sheet {o.SheetName} not found in the excel file");
+                        }
+
                         do
                         {
-                            var sheetName = edr.WorksheetName;
-                            using (CsvDataWriter cdw = CsvDataWriter.Create("data-" + sheetName + ".csv"))
+                            // var sheetName = edr.WorksheetName;   //for future implementation
+                            using (CsvDataWriter cdw = CsvDataWriter.Create(o.OutputFileName, new CsvDataWriterOptions
+                            {
+                                Delimiter = o.Delimiter
+                            }))
                             {
                                 cdw.Write(edr);
                             }
@@ -36,14 +44,14 @@ Parser.Default.ParseArguments<Options>(args)
 
 class Options
 {
-    [Value(0, Required = true, MetaName = "InputFile", HelpText = "Input file to be processed.")]
+    [Value(0, Required = true, MetaName = "xlsxfile", HelpText = "xlsx file path")]
     public string InputFileName { get; set; }
 
-    [Value(2, Required = false, MetaName = "Worksheet", HelpText = "Worksheet name to be processed.")]
-    public string WorksheetName { get; set; }
-
-    [Value(1, Required = false, MetaName = "OutputFile", HelpText = "Output file to write data to.")]
+    [Value(1, Required = false, MetaName = "outfile", HelpText = "output csv file path")]
     public string OutputFileName { get; set; }
+
+    [Option('n', "sheetname", Required = false, HelpText = "Worksheet name to be processed.")]
+    public string SheetName { get; set; }
 
 
     // [Option("password", Required = false, HelpText = "Password for open xlsx file.")]
@@ -52,8 +60,8 @@ class Options
     // [Option("encoding", Required = false, HelpText = "CSV file encoding.", Default = "utf-8")]
     // public string Encoding { get; set; }
 
-    // [Option("separator", Required = false, HelpText = "CSV file separator.")]
-    // public string Separator { get; set; }
+    [Option('d', "delimiter", Required = false, HelpText = "CSV file separator.")]
+    public char Delimiter { get; set; }
 
     // [Option("language", Required = false, HelpText = "CSV file language (culture).")]
     // public string Language { get; set; }
