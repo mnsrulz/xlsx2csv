@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xlsx2csv", "xlsx2csv\xlsx2csv.csproj", "{61983B93-3BEB-42B8-8B68-53C0113D9365}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xlsx2csv.Tests", "xlsx2csv.Tests\xlsx2csv.Tests.csproj", "{B6546742-EB07-4B7B-B641-32287855104D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{61983B93-3BEB-42B8-8B68-53C0113D9365}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61983B93-3BEB-42B8-8B68-53C0113D9365}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61983B93-3BEB-42B8-8B68-53C0113D9365}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6546742-EB07-4B7B-B641-32287855104D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6546742-EB07-4B7B-B641-32287855104D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6546742-EB07-4B7B-B641-32287855104D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6546742-EB07-4B7B-B641-32287855104D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

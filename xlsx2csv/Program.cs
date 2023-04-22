@@ -3,46 +3,51 @@ using CommandLine;
 using Sylvan.Data.Csv;
 using Sylvan.Data.Excel;
 
-Parser.Default.ParseArguments<Options>(args)
-                    .WithParsed<Options>(o =>
-                    {
-                        long startTime = Stopwatch.GetTimestamp();
-                        var inputFile = new FileInfo(o.InputFileName);
-                        if (!inputFile.Exists) throw new FileNotFoundException("File not exists");
+Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(XlsxUtility.Convert);
 
-                        if (String.IsNullOrEmpty(o.OutputFileName))
-                            o.OutputFileName = Path.ChangeExtension(inputFile.FullName, ".csv");
 
-                        if (char.IsWhiteSpace(o.Delimiter))
-                            o.Delimiter = ',';
+public class XlsxUtility
+{
+    public static void Convert(Options o)
+    {
+        long startTime = Stopwatch.GetTimestamp();
+        var inputFile = new FileInfo(o.InputFileName);
+        if (!inputFile.Exists) throw new FileNotFoundException("File not exists");
 
-                        var edr = ExcelDataReader.Create(o.InputFileName, new ExcelDataReaderOptions
-                        {
-                            GetErrorAsNull = true
-                        });
-                        if (!string.IsNullOrWhiteSpace(o.SheetName))
-                        {
-                            if (edr.WorksheetNames.Contains(o.SheetName)) edr.TryOpenWorksheet(o.SheetName);
-                            else throw new KeyNotFoundException($"Sheet {o.SheetName} not found in the excel file");
-                        }
+        if (String.IsNullOrEmpty(o.OutputFileName))
+            o.OutputFileName = Path.ChangeExtension(inputFile.FullName, ".csv");
 
-                        do
-                        {
-                            // var sheetName = edr.WorksheetName;   //for future implementation
-                            using (CsvDataWriter cdw = CsvDataWriter.Create(o.OutputFileName, new CsvDataWriterOptions
-                            {
-                                Delimiter = o.Delimiter
-                            }))
-                            {
-                                cdw.Write(edr);
-                            }
-                        } while (edr.NextResult());
+        if (!new[] { ',', '|', '\t' }.Contains(o.Delimiter))
+            o.Delimiter = ',';
 
-                        TimeSpan elapsedTime = Stopwatch.GetElapsedTime(startTime);
-                        Console.WriteLine($"Converted file in {elapsedTime}");
-                    });
+        var edr = ExcelDataReader.Create(o.InputFileName, new ExcelDataReaderOptions
+        {
+            GetErrorAsNull = true
+        });
+        if (!string.IsNullOrWhiteSpace(o.SheetName))
+        {
+            if (edr.WorksheetNames.Contains(o.SheetName)) edr.TryOpenWorksheet(o.SheetName);
+            else throw new KeyNotFoundException($"Sheet {o.SheetName} not found in the excel file");
+        }
 
-class Options
+        do
+        {
+            // var sheetName = edr.WorksheetName;   //for future implementation
+            using (CsvDataWriter cdw = CsvDataWriter.Create(o.OutputFileName, new CsvDataWriterOptions
+            {
+                Delimiter = o.Delimiter
+            }))
+            {
+                cdw.Write(edr);
+            }
+        } while (edr.NextResult());
+
+        TimeSpan elapsedTime = Stopwatch.GetElapsedTime(startTime);
+        Console.WriteLine($"Converted file in {elapsedTime}");
+    }
+}
+
+public class Options
 {
     [Value(0, Required = true, MetaName = "xlsxfile", HelpText = "xlsx file path")]
     public string InputFileName { get; set; }
