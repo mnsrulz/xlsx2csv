@@ -3,7 +3,7 @@ A dotnet tool to convert xlsx files to csv format. Handles large XLSX files. Fas
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/mnsrulz/xlsx2csv/blob/master/LICENSE)
 [![nuget](https://img.shields.io/nuget/v/xlsx2csv.svg)](https://www.nuget.org/packages/xlsx2csv)
-[![downloads](https://img.shields.io/nuget/dt/xlsx2csv.svg)](https://www.npmjs.com/package/nurlresolver)
+[![downloads](https://img.shields.io/nuget/dt/xlsx2csv.svg)](https://www.nuget.org/packages/xlsx2csv)
 [![github forks](https://img.shields.io/github/forks/mnsrulz/xlsx2csv.svg)](https://github.com/mnsrulz/xlsx2csv/network/members)
 [![github stars](https://img.shields.io/github/stars/mnsrulz/xlsx2csv.svg)](https://github.com/mnsrulz/xlsx2csv/stargazers)
 
@@ -34,6 +34,6 @@ xlsx2csv file.xlsx
 | Name      | Type | Description     |
 | :---        |    :----:   |          ---: 
 | -n, --sheetname      | string       | Worksheet name to be processed
-| -d, --delimiter   | string        | CSV file separator
+| -d, --delimiter   | string        | File separator (comma(,), pipe(\|) and tab (\t) are supported currently)
 | --help   | string        | Display this help screen
 | --version   | string        | Display version information
